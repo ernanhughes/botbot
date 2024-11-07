@@ -84,8 +84,11 @@ const Popup: React.FC = () => {
                   Summarizing...
                 </Button>
               ) : (
-                <Button onClick={handleSummarize}>Summarize This Page</Button>
+                <Button onClick={handleSummarize}>Summarize Page</Button>
               )}
+            </div>
+            <div className="basis-1/2 flex flex-col justify-end items-end my-1">
+              <Button onClick={handleSummarize}>Summarize This Page</Button>
             </div>
           </div>
           <div className="basis-1/1 grid w-full gap-2">

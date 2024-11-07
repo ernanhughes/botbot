@@ -24,6 +24,7 @@ export async function summarizeWebPage(language: string): Promise<string> {
   if (!article) {
     throw new Error("Failed to extract article content");
   }
+  console.debug("article", article);  
 
   // Convert article content to markdown using Turndown
   const turndownService = new TurndownService();

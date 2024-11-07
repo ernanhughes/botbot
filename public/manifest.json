@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Web Distiller AI",
-  "version": "0.8",
-  "description": "Summarizes and Translates web pages using Gemini Nano in Chrome",
+  "name": "botbot",
+  "version": "0.1",
+  "description": "Detects highlights and filters AI generated web content.",
   "permissions": [
     "activeTab",
     "scripting"
