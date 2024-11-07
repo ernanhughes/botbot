@@ -1,19 +1,12 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    }
+      "module": "commonjs",
+      "target": "es5",
+      "noImplicitAny": true,
+      "noImplicitUseStrict": true,
+      "noImplicitReturns": true,
+      "strictNullChecks": true,
+      "jsx": "react",
+      "lib": ["dom", "es2017"]
   }
 }
