@@ -1,76 +1,57 @@
 # botbot
 
-An extension to filter Ai generated content from youm your browing
-
-## Installation
-
-	$ npm install
-
-## Usage
-
-Run `$ gulp --watch` and load the `dist`-directory into chrome.
-
-## Entryfiles (bundles)
-
-There are two kinds of entryfiles that create bundles.
-
-1. All ts-files in the root of the `./app/scripts` directory
-2. All css-,scss- and less-files in the root of the `./app/styles` directory
-
-## Tasks
-
-### Build
-
-    $ gulp
+A chrome extension for detecting, highlighting and filtering AI generated content.
 
 
-| Option         | Description                                                                                                                                           |
-|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `--watch`      | Starts a livereload server and watches all assets. <br>To reload the extension on change include `livereload.js` in your bundle.                      |
-| `--production` | Minifies all assets                                                                                                                                   |
-| `--verbose`    | Log additional data to the console.                                                                                                                   |
-| `--vendor`     | Compile the extension for different vendors (chrome, firefox, opera, edge)  Default: chrome                                                                 |
-| `--sourcemaps` | Force the creation of sourcemaps. Default: !production                                                                                                |
+## Setup Instructions
 
+1. Download and install [Chrome Dev channel](https://www.google.com/chrome/dev/) (
+   or [Canary channel](https://www.google.com/chrome/canary/)).
 
-### pack
+- Ensure your Chrome version is equal to or newer than 127.0.6512.0.
 
-Zips your `dist` directory and saves it in the `packages` directory.
+2. Enable required Chrome flags:
+    - Open a new tab and go to `chrome://flags/#optimization-guide-on-device-model`
+    - Select "`Enabled BypassPerfRequirement`"
 
-    $ gulp pack --vendor=firefox
+- This bypasses performance checks which might prevent Gemini Nano from downloading on your device.
+    - Go to `chrome://flags/#prompt-api-for-gemini-nano`
+    - Select "`Enabled`"
+    - Go to `chrome://components/` - You'll want to see the "`Optimization Guide On Device Model`" - Click
+      on "`Check for update`" and update the component.
 
-### Version
+3. Relaunch Chrome for the changes to take effect.
 
-Increments version number of `manifest.json` and `package.json`,
-commits the change to git and adds a git tag.
+4. Install the Gemini Chrome AI - Offline extension (installation instructions to be added).
 
+## Current Status
 
-    $ gulp patch      // => 0.0.X
+This project is still in development. Features and functionality may change as the project evolves.
 
-or
+## Contributing
 
-    $ gulp feature    // => 0.X.0
+We welcome contributions! Please feel free to submit issues, feature requests, or pull
+requests.
 
-or
+## To Set Up the Project Locally
 
-    $ gulp release    // => X.0.0
+1. Clone the repository:
 
-
-## Globals
-
-The build tool also defines a variable named `process.env.NODE_ENV` in your scripts. It will be set to `development` unless you use the `--production` option.
-
-
-**Example:** `./app/background.ts`
-
-```typescript
-if(process.env.NODE_ENV === 'development'){
-  console.log('We are in development mode!');
-}
+```bash
+git clone 
 ```
 
+2. Install the dependencies:
 
+```bash
+npm install
+npm run build
+```
 
+4. Load the extension in Chrome: Open Chrome and go to `chrome://extensions/` and enable Developer mode. Click on "Load
+   unpacked" and select the `build/chrome` folder in the project directory.
+5. The extension should now be loaded in Chrome.
 
+## License
 
-
+This project is licensed under the MIT License. For more information, please see the [LICENSE](LICENSE) file.
