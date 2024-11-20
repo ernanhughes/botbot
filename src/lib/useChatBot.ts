@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { useAI } from './useAI';
+import {Message} from './types'
 
-interface Message {
-    msg: string;
-    role: 'user' | 'robot';
-}
 
 const useChatBot = (): [Message[], (question: string) => void] => {
     const [enabled, ai] = useAI()
@@ -21,8 +18,8 @@ const useChatBot = (): [Message[], (question: string) => void] => {
         }
 
         const prompt = article && question === '/summary' ? `<TEXTOFARTICLE>${article.trim()}</TEXTOFARTICLE>\nBrief summary of the above content` : question
-            // @ts-expect-error ai not available yet
-            ai.prompt(prompt).then((response: string) => {
+        // @ts-expect-error ai not available yet
+        ai.prompt(prompt).then((response: string) => {
             setMessages((prevMessages) => [...prevMessages, { msg: response, role: 'robot' }]);
         })
     }

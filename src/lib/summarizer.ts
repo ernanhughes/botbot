@@ -57,7 +57,7 @@ export async function summarizeWebPage(language: string): Promise<string> {
 
   // Translate the summary to Japanese
   console.debug("language", language);
-  // initialize session for tlanslation
+  // initialize session for translation
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const sessionTranslator = await window.ai.assistant.create({
