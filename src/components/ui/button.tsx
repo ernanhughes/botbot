@@ -34,23 +34,31 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className">,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className = "", variant = "default", size = "default", asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
+
+    if (process.env.NODE_ENV === "development") {
+      if (asChild && React.Children.count(props.children) !== 1) {
+        console.warn("The 'asChild' prop expects a single valid React child.");
+      }
+    }
+
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size }), className)}
         ref={ref}
         {...props}
       />
     );
   }
 );
+
 Button.displayName = "Button";
 
 export { Button, buttonVariants };

@@ -81,21 +81,3 @@ export async function summarizeWebPage(language: string): Promise<string> {
   return titleAndUrl + summary;
 }
 
-export async function nasa(): Promise<string> {
-  // Generate summary using Gemini Nano
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const session = await window.ai.assistant.create({
-      systemPrompt:
-          "You are helpful assistant your job is to provide concise but accurate answers. Your output is markdown formatted. If you od not know just respond with I do not know.",
-      topK: 1,
-      temperature: .9,
-  });
-
-  const prompt = `What does nasa stand for?`;
-  console.debug("prompt", prompt);
-  let result = await session.prompt(prompt);
-  session.destroy();
-
-  return result;
-}

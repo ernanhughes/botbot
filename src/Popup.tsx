@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { summarizeWebPage, nasa } from "./lib/summarizer";
+import { summarizeWebPage } from "./lib/summarizer";
 import { Button } from "./components/ui/button";
 import {
   Select,
@@ -32,8 +32,6 @@ const Popup: React.FC = () => {
   const handleSummarize = async () => {
     setIsSummaryLoading(true);
     try {
-      const nasaResult = await nasa();
-      console.log(nasaResult)
       const result = await summarizeWebPage(language);
       setSummary(result);
       toast({
