@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "botbot",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Detects highlights and filters AI generated web content.",
   "permissions": [
     "activeTab",
