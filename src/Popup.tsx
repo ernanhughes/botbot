@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { summarizeWebPage } from "./lib/summarizer";
 import { Button } from "./components/ui/button";
+import { useChromeVersion } from "./lib/useChromeVersion";
 import {
   Select,
   SelectContent,
@@ -13,24 +14,33 @@ import { SelectValue } from "@radix-ui/react-select";
 import { useToast } from "./components/ui/use-toast";
 import { Label } from "./components/ui/label";
 import { Footer } from "./components/ui/footer";
-import { useChromeVersion } from "./lib/useChromeVersion";
-
-const getDefaultLanguage = () => {
-  const browserLocale = navigator.language;
-  if (browserLocale.startsWith("ja")) {
-    return "japanese";
-  } else {
-    return "english";
-  }
-};
+import { Tab } from './components/ui/tab';
 
 const Popup: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>('highlight');
   const [summary, setSummary] = useState("");
-  const [language, setLanguage] = useState(getDefaultLanguage());
+  const [language, setLanguage] = useState(() => {
+    const lng = navigator.language;
+    return lng;
+  });
   const [isSummaryLoading, setIsSummaryLoading] = useState(false);
 
   const { toast } = useToast();
   const [_, majorVersion] = useChromeVersion()
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'highlight':
+        return <div>Highlight Selected Text Section</div>;
+      case 'manage':
+        return <div>Manage Highlights Section</div>;
+      case 'settings':
+        return <div>Settings Section</div>;
+      default:
+        return null;
+    }
+  };
+
 
   const handleSummarize = async () => {
     setIsSummaryLoading(true);
@@ -55,6 +65,26 @@ const Popup: React.FC = () => {
 
   return (
     <div className="container">
+       <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        <Tab
+          label="Highlight"
+          isActive={activeTab === 'highlight'}
+          onClick={() => setActiveTab('highlight')}
+        />
+        <Tab
+          label="Manage Highlights"
+          isActive={activeTab === 'manage'}
+          onClick={() => setActiveTab('manage')}
+        />
+        <Tab
+          label="Settings"
+          isActive={activeTab === 'settings'}
+          onClick={() => setActiveTab('settings')}
+        />
+      </div>
+      <div style={{ padding: '20px' }}>
+        {renderTabContent()}
+      </div>
       <div className="box-border h-auto w-[400px]">
         <div className="flex flex-col m-1 p-1">
           <div className="flex flex-row my-1 justify">
