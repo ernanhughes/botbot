@@ -1,9 +1,21 @@
 import { Readability } from "@mozilla/readability";
 import TurndownService from "turndown";
 
+
 export async function summarizeWebPage(language: string): Promise<string> {
-  // get current tab content
-  console.debug("summarizeWebPage");
+  const start = performance.now();
+  const article = await extractArticleContent();
+  console.log(`Execution time: ${performance.now() - start} ms`);
+  const start2 = performance.now();
+  const result = await summarizeContent(article, language)
+  console.log(`Execution time: ${performance.now() - start2} ms`);
+  return result;
+}
+
+export async function extractArticleContent(): Promise<{ title: string; content: string | null; url: string | undefined }> {
+  console.debug("extractArticleContent");
+
+  // Get current tab content
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab.id) {
     throw new Error("No active tab found");
@@ -24,7 +36,19 @@ export async function summarizeWebPage(language: string): Promise<string> {
   if (!article) {
     throw new Error("Failed to extract article content");
   }
-  console.debug("article", article);  
+
+  console.debug("article", article);
+
+  return { title: article.title, content: article.content, url: tab.url };
+}
+
+export async function summarizeContent(
+  article: { title: string; content: string | null; url: string | undefined },
+  language: string
+): Promise<string> {
+  if (!article.content) {
+    throw new Error("Article content is empty");
+  }
 
   // Convert article content to markdown using Turndown
   const turndownService = new TurndownService();
@@ -32,7 +56,7 @@ export async function summarizeWebPage(language: string): Promise<string> {
 
   const markdownLines = markdown.split("\n");
 
-  // extract first N lines to avoid exceeding the input limit
+  // Extract first N lines to avoid exceeding the input limit
   const maxLength = 40;
   if (markdownLines.length > maxLength) {
     markdownLines.splice(maxLength);
@@ -43,25 +67,24 @@ export async function summarizeWebPage(language: string): Promise<string> {
   // @ts-ignore
   const session = await window.ai.assistant.create({
     systemPrompt:
-      "You are helpful assistant to summarize web article. Your output is markdown formatted. please summary with bullet points and meaningful sections.",
+      "You are a helpful assistant summarizing web articles. Your output is markdown formatted. Please summarize with bullet points and meaningful sections.",
     topK: 10,
     temperature: 0,
   });
 
   const markdownPrompt = markdownLines.join("\n");
 
-  const prompt = `Summarize the following text.:\n\n${markdownPrompt}`;
+  const prompt = `Summarize the following text:\n\n${markdownPrompt}`;
   console.debug("prompt", prompt);
   let summary = await session.prompt(prompt);
   session.destroy();
 
-  // Translate the summary to Japanese
+  // Translate the summary to Japanese if needed
   console.debug("language", language);
-  // initialize session for translation
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const sessionTranslator = await window.ai.assistant.create({
-    systemPrompt: "You are helpful assistant to translate the summary",
+    systemPrompt: "You are a helpful assistant to translate the summary",
     topK: 10,
     temperature: 0,
   });
@@ -77,7 +100,6 @@ export async function summarizeWebPage(language: string): Promise<string> {
   console.debug("summary", summary);
 
   // Add title and URL to the summary
-  const titleAndUrl = `# [${tab.title}](${tab.url})\n\n`;
+  const titleAndUrl = `# [${article.title}](${article.url})\n\n`;
   return titleAndUrl + summary;
 }
-

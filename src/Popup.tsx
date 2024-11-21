@@ -12,6 +12,8 @@ import { Textarea } from "./components/ui/textarea";
 import { SelectValue } from "@radix-ui/react-select";
 import { useToast } from "./components/ui/use-toast";
 import { Label } from "./components/ui/label";
+import { Footer } from "./components/ui/footer";
+import { useChromeVersion } from "./lib/useChromeVersion";
 
 const getDefaultLanguage = () => {
   const browserLocale = navigator.language;
@@ -28,6 +30,7 @@ const Popup: React.FC = () => {
   const [isSummaryLoading, setIsSummaryLoading] = useState(false);
 
   const { toast } = useToast();
+  const [_, majorVersion] = useChromeVersion()
 
   const handleSummarize = async () => {
     setIsSummaryLoading(true);
@@ -107,6 +110,16 @@ const Popup: React.FC = () => {
             </Button>
           </div>
         </div>
+      </div>
+      <div className="basis-1/1 grid w-full gap-2">
+        <Textarea value={majorVersion} rows={1} readOnly />
+      </div>
+      <div>
+      <Footer
+        creatorName="Ernan Hughes"
+        creatorUrl="http://www.programmer.ie/"
+        repoUrl="https://github.com/ernanhughes/botbot"
+      />
       </div>
     </div>
   );
